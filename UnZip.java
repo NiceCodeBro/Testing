@@ -9,7 +9,15 @@ import java.util.zip.ZipInputStream;
 public class UnZip
 {
     List<String> fileList;
+    
+    public static void main (String[] args){
 
+        UnZip unZip = new UnZip();
+        unZip.unZipIt("/home/yzfurkan/Desktop/master.zip","/home/yzfurkan/Desktop/unZippedFile");
+   
+    }
+    
+    
     /**
      * Unzip it
      * @param zipFile input zip file
