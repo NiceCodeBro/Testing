@@ -1,19 +1,4 @@
-package first_den;
-
-import static org.junit.Assert.*;
-
 public class calculator {
-	
-	
-	public static void main(String[] args) 
-	{ 
-		calculator t = new calculator();
-		String a = t.test("2+2").toString();
-		System.out.println(a);
-		
-		assertEquals( a , "4");
-	} 
-	
 
 	public Integer test(String args) {
 				
@@ -56,14 +41,3 @@ public class calculator {
 	}
 	
 }
-
-
-/*
- * Parametre olarak String degilde, ayrý ayrý alsaydý int a int b ve char operasyon seklinde, oyle olurdu,
-calculator c = new calculator();
-switch(op){
-	case '+' : test_sum(a,b,expected);
-	case '-' : test_sub(a,b,expected);
-	case '*' : test_mult(a,b,expected);
-}
-*/
