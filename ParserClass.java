@@ -50,76 +50,97 @@ public class ParserClass {
      */
     public static String findMethods(String allChar){
         String parsedChar = " ";
+        String keywordsList = "\n" +
+                "abstract\tcontinue\tfor\tnew\tswitch\n" +
+                "assert***\tdefault\tgoto*\tpackage\tsynchronized\n" +
+                "boolean\tdo\tif\tprivate\tthis\n" +
+                "break\tdouble\timplements\tprotected\tthrow\n" +
+                "byte\telse\timport\tpublic\tthrows\n" +
+                "case\tenum****\tinstanceof\treturn\ttransient\n" +
+                "catch\textends\tint\tshort\ttry\n" +
+                "char\tfinal\tinterface\tstatic\tvoid\n" +
+                "class\tfinally\tlong\tstrictfp**\tvolatile\n" +
+                "const*\tfloat\tnative\tsuper\twhile";
+
+
 
         String split1 ="";
         String split2 ="";
 
-        /*Find Public methods*/
-        int keywordIndex = allChar.indexOf("public");
-        while(keywordIndex != -1){
-            int closingIndex = allChar.indexOf(")",keywordIndex);
-            parsedChar += allChar.substring(keywordIndex,closingIndex+1);
-            parsedChar += "\n";
+        /*Find methods*/
+        int closingIndex = allChar.indexOf(")");
+        while(closingIndex != -1){
 
-            split1 = allChar.substring(0, keywordIndex);
-            split2 = allChar.substring(closingIndex);
-            allChar = "";
-            allChar = split1 + split2;
 
-            keywordIndex = allChar.indexOf("public");
-        }
+            int curlyBracketIndex = allChar.indexOf("{",closingIndex);
 
-        /*Find Private methods*/
-        keywordIndex = allChar.indexOf("private");
-        while(keywordIndex != -1){
-            int closingIndex = allChar.indexOf(")",keywordIndex);
-            parsedChar += allChar.substring(keywordIndex,closingIndex+1);
-            parsedChar += "\n";
+            if( curlyBracketIndex != -1){
+                boolean status = true;
 
-            split1 = allChar.substring(0, keywordIndex);
-            split2 = allChar.substring(closingIndex);
-            allChar = "";
-            allChar = split1 + split2;
+                for(int i=closingIndex+1; i<curlyBracketIndex;i++ )
+                    if(allChar.charAt(i) != ' ' && allChar.charAt(i) != '\n'){
+                        status = false;
+                        break;
+                    }
 
-            keywordIndex = allChar.indexOf("private");
-        }
+                if(curlyBracketIndex-closingIndex == 1)
+                    status = true;
 
-        /*Find Static Methods*/
-        keywordIndex = allChar.indexOf("static");
-        while(keywordIndex != -1){
-            int closingIndex = allChar.indexOf(")",keywordIndex);
-            int semicolonIndex = allChar.indexOf(";",keywordIndex);
 
-            if(semicolonIndex >= closingIndex || semicolonIndex == -1) {
-                parsedChar += allChar.substring(keywordIndex, closingIndex + 1);
-                parsedChar += "\n";
+                if(status){
+                    int lastIndex = 0;
+                    int firstIndex = 0;
 
-                split1 = allChar.substring(0, keywordIndex);
-                split2 = allChar.substring(closingIndex);
+                    String tempString = allChar.substring(0,closingIndex);
+                    int closingP = tempString.lastIndexOf("(");
+
+
+                    for(int i=closingP-1; i>0; i--){
+                        if(allChar.charAt(i) != ' ') {
+                            lastIndex = i;
+                            break;
+                        }
+                    }
+
+                    for(int i=lastIndex-1; i>0; i--){
+                        if(allChar.charAt(i) == ' ') {
+                            firstIndex = i;
+                            break;
+                        }
+                    }
+                    if(allChar.charAt(firstIndex+1) == '}')
+                        firstIndex++;
+
+                    String temp = allChar.substring(firstIndex+1,lastIndex+1);
+
+                    if(keywordsList.indexOf(temp) == -1) {
+                        parsedChar += allChar.substring(firstIndex+1,closingIndex+1);
+                        parsedChar += "\n";
+                    }
+
+                    split1 = allChar.substring(0, firstIndex);
+                    split2 = allChar.substring(closingIndex+1);
+                    allChar = "";
+                    allChar = split1 + split2;
+
+                }
+                else{
+                    split1 = allChar.substring(0, closingIndex-1);
+                    split2 = allChar.substring(closingIndex+1);
+                    allChar = "";
+                    allChar = split1 + split2;
+                }
+
+            }
+            else{
+                split1 = allChar.substring(0, closingIndex-1);
+                split2 = allChar.substring(closingIndex+1);
                 allChar = "";
                 allChar = split1 + split2;
             }
 
-            keywordIndex = allChar.indexOf("static");
-        }
+            closingIndex = allChar.indexOf(")");
 
-        /*Find Protected Methods*/
-        keywordIndex = allChar.indexOf("protected");
-        while(keywordIndex != -1){
-            int closingIndex = allChar.indexOf(")",keywordIndex);
-            int semicolonIndex = allChar.indexOf(";",keywordIndex);
-
-            if(semicolonIndex >= closingIndex || semicolonIndex == -1) {
-                parsedChar += allChar.substring(keywordIndex, closingIndex + 1);
-                parsedChar += "\n";
-
-                split1 = allChar.substring(0, keywordIndex);
-                split2 = allChar.substring(closingIndex);
-                allChar = "";
-                allChar = split1 + split2;
-            }
-
-            keywordIndex = allChar.indexOf("protected");
         }
 
         return parsedChar;
@@ -182,7 +203,7 @@ public class ParserClass {
 
     public static void main(String[] args) throws ClassNotFoundException {
 
-        System.out.println(parser("C:\\Users\\murat\\Desktop\\Parser\\src\\combination.java"));
+        System.out.println(parser("DiscreteFourierTransform.java"));
 
     }
 }
