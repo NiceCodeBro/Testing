@@ -10,10 +10,6 @@ public class autoRun {
 
     public static void main (String[] args){
 
-        UnZip unZip = new UnZip();
-        unZip.unZipIt("/home/serhan/Desktop/master.zip","/home/serhan/Desktop/unziphali");
-
-        /*
         ProcessBuilder builder = new ProcessBuilder("java", "calculator");
         builder.directory(new File("/home/serhan/Desktop"));//I don't know you're on linux or windows. Just go to where your "SecondApplication" is located.
         try {
@@ -21,6 +17,6 @@ public class autoRun {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
+        
     }
 }
