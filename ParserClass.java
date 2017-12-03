@@ -126,6 +126,12 @@ public class ParserClass {
                     }
 
                     String returnType = allChar.substring(privateControlFirstIndex+1,privateControlLastIndex+1);
+                    int cControl = 0;
+                    if(returnType.equals("\n") || returnType.equals("public")
+                            || returnType.indexOf(";")!=-1 || returnType.indexOf("{") != -1
+                            || returnType.indexOf("}") != -1)
+                        cControl = -1;
+
 
                     for(int i=privateControlFirstIndex-1; i>0; i--){
                         if(allChar.charAt(i) != ' ') {
@@ -149,7 +155,7 @@ public class ParserClass {
                     int pControl = temp.indexOf("(");
 
                     if(keywordsList.indexOf(temp) == -1 && !(privateControlString.equals("private")) &&
-                            pControl == -1) {
+                            pControl == -1 && cControl != -1) {
                         parsedChar += returnType +" ";
                         parsedChar += allChar.substring(firstIndex+1,closingIndex+1);
                         parsedChar += "\n";
@@ -273,11 +279,11 @@ public class ParserClass {
 
 
     public static void main(String[] args) throws ClassNotFoundException {
-        String methodLine="";
-        Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
+        String methodLine=null;
+      //  Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
 
 
-        methodLine = parser("calculator.java");
+        methodLine = parser("DiscreteFourierTransform.java");
         System.out.println(methodLine);
        // listOfLists = lineParser(methodLine);
 
