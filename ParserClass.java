@@ -3,9 +3,13 @@ import jdk.internal.dynalink.beans.StaticClass;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class ParserClass {
+
+
+
     /**
      *
      * @param allChar file to process in the string type
@@ -93,7 +97,8 @@ public class ParserClass {
 
                     String tempString = allChar.substring(0,closingIndex);
                     int closingP = tempString.lastIndexOf("(");
-
+                    int privateControlLastIndex = 0;
+                    int privateControlFirstIndex = 0;
 
                     for(int i=closingP-1; i>0; i--){
                         if(allChar.charAt(i) != ' ') {
@@ -108,12 +113,41 @@ public class ParserClass {
                             break;
                         }
                     }
+                    for(int i=firstIndex-1; i>0; i--){
+                        if(allChar.charAt(i) != ' ') {
+                            privateControlLastIndex = i;
+                            break;
+                        }
+                    }
+                    for(int i=privateControlLastIndex-1; i>0; i--){
+                        if(allChar.charAt(i) == ' ') {
+                            privateControlFirstIndex = i;
+                            break;
+                        }
+                    }
+                    for(int i=privateControlFirstIndex-1; i>0; i--){
+                        if(allChar.charAt(i) != ' ') {
+                            privateControlLastIndex = i;
+                            break;
+                        }
+                    }
+                    for(int i=privateControlLastIndex-1; i>0; i--){
+                        if(allChar.charAt(i) == ' ') {
+                            privateControlFirstIndex = i;
+                            break;
+                        }
+                    }
+
+                    String privateControlString = allChar.substring(privateControlFirstIndex+1,privateControlLastIndex+1);
+                    System.out.println(privateControlString);
+
+
                     if(allChar.charAt(firstIndex+1) == '}')
                         firstIndex++;
 
                     String temp = allChar.substring(firstIndex+1,lastIndex+1);
 
-                    if(keywordsList.indexOf(temp) == -1) {
+                    if(keywordsList.indexOf(temp) == -1 && !(privateControlString.equals("private"))) {
                         parsedChar += allChar.substring(firstIndex+1,closingIndex+1);
                         parsedChar += "\n";
                     }
@@ -199,6 +233,9 @@ public class ParserClass {
 
        return parsedChar;
     }
+
+
+
 
 
     public static void main(String[] args) throws ClassNotFoundException {
