@@ -139,7 +139,6 @@ public class ParserClass {
                     }
 
                     String privateControlString = allChar.substring(privateControlFirstIndex+1,privateControlLastIndex+1);
-                    System.out.println(privateControlString);
 
 
                     if(allChar.charAt(firstIndex+1) == '}')
