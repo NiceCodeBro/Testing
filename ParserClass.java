@@ -1,13 +1,10 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Vector;
 
 
 public class ParserClass {
-
-
 
     /**
      *
@@ -64,8 +61,6 @@ public class ParserClass {
                 "char\tfinal\tinterface\tstatic\tvoid\n" +
                 "class\tfinally\tlong\tstrictfp**\tvolatile\n" +
                 "const*\tfloat\tnative\tsuper\twhile";
-
-
 
         String split1 ="";
         String split2 ="";
@@ -240,12 +235,10 @@ public class ParserClass {
             }
         }
 
-       return parsedChar;
+        return parsedChar;
     }
 
 
-
-/*
     public static Vector<Vector<String>> lineParser(String parsedChar){
 
         Vector<Vector<String>> s = new Vector<Vector<String>>();
@@ -255,39 +248,106 @@ public class ParserClass {
         int closeIndex = parsedChar.indexOf(")");
         int commaIndex = 0;
         String methodName ="";
+        String returnType = "";
         String parameters="";
+        String parameterType ="";
+        String variable="";
+        String sign ="";
+        boolean emptyStatus = true;
 
         while(openIndex != -1){
-            methodName = parsedChar.substring(0,openIndex-1);
+            subVec = new Vector<>();
+
+            parameters = parsedChar.substring(openIndex, closeIndex);
+            sign = parsedChar.substring(0,openIndex);
+
+            for(int i=0; i<openIndex-1; i++)
+                if(sign.charAt(i) == ' '
+                        || sign.charAt(i) == '\t'
+                        || sign.charAt(i) == '\n')
+                    sign = sign.substring(1);
+                else
+                    break;
+
+            returnType = sign.substring(0,sign.indexOf(" "));
+            methodName = sign.substring(sign.indexOf(" "));
+            returnType = returnType.replaceAll("\\s+","");
+            methodName = methodName.replaceAll("\\s+","");
+
+            subVec.add(returnType);
             subVec.add(methodName);
-            parameters = parsedChar.substring(openIndex,closeIndex);
+
+
+            String emptyControl = parameters.replaceAll("\\s+","");
+            emptyControl += ")";
+
+            emptyStatus = true;
+
+            if(emptyControl.indexOf("(") - emptyControl.indexOf(")") == -1){
+                emptyStatus = false;
+            }
+
             commaIndex = parameters.indexOf(",");
 
-            while(commaIndex != -1){
+            if(emptyStatus && commaIndex == -1){
 
+                parameters = parameters.substring(1);
+                String[] textStr = parameters.split(" ");
+                parameterType = textStr[0];
+                variable = textStr[1];
+                parameterType = parameterType.replaceAll("\\s+","");
+                variable = variable.replaceAll("\\s+","");
+                subVec.add(parameterType);
+                subVec.add(variable);
+            }
+            else if(commaIndex != -1){
+
+                parameters = parameters.substring(1);
+                String[] allTextStr = parameters.split(",");
+
+
+                for(int i=0; i<allTextStr.length; i++)
+                    for(int j=0; j<allTextStr[i].length(); j++) {
+                        if(allTextStr[i].charAt(j) == ' '
+                                ||allTextStr[i].charAt(j) == '\n'
+                                ||allTextStr[i].charAt(j) == '\t')
+                            allTextStr[i] = allTextStr[i].substring(1);
+                        else
+                            j=allTextStr[i].length();
+                    }
+
+                for(int i=0; i<allTextStr.length; i++){
+                    String[] textStr = allTextStr[i].split(" ");
+                    parameterType = textStr[0];
+                    variable = textStr[1];
+                    parameterType = parameterType.replaceAll("\\s+","");
+                    variable = variable.replaceAll("\\s+","");
+                    subVec.add(parameterType);
+                    subVec.add(variable);
+                }
 
             }
 
-
+            s.addElement(subVec);
+            parsedChar = parsedChar.substring(closeIndex+1);
+            openIndex = parsedChar.indexOf("(");
+            closeIndex = parsedChar.indexOf(")");
         }
 
-        s.addElement(subVec);
 
         return s;
-    }*/
-
-
+    }
 
     public static void main(String[] args) throws ClassNotFoundException {
         String methodLine=null;
-      //  Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
+        Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
 
+        methodLine = parser("calculator.java");
+        //System.out.println(methodLine);
+        listOfLists = lineParser(methodLine);
 
-        methodLine = parser("DiscreteFourierTransform.java");
-        System.out.println(methodLine);
-       // listOfLists = lineParser(methodLine);
-
-    //    System.out.println(listOfLists.get(1).size());
+        for(int i=0; i<listOfLists.size(); i++)
+            System.out.println(listOfLists.get(i));
 
     }
 }
