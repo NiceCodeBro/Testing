@@ -1,9 +1,8 @@
-import jdk.internal.dynalink.beans.StaticClass;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 
 public class ParserClass {
@@ -140,13 +139,14 @@ public class ParserClass {
 
                     String privateControlString = allChar.substring(privateControlFirstIndex+1,privateControlLastIndex+1);
 
-
                     if(allChar.charAt(firstIndex+1) == '}')
                         firstIndex++;
 
                     String temp = allChar.substring(firstIndex+1,lastIndex+1);
+                    int pControl = temp.indexOf("(");
 
-                    if(keywordsList.indexOf(temp) == -1 && !(privateControlString.equals("private"))) {
+                    if(keywordsList.indexOf(temp) == -1 && !(privateControlString.equals("private")) &&
+                            pControl == -1) {
                         parsedChar += allChar.substring(firstIndex+1,closingIndex+1);
                         parsedChar += "\n";
                     }
@@ -235,11 +235,49 @@ public class ParserClass {
 
 
 
+/*
+    public static Vector<Vector<String>> lineParser(String parsedChar){
+
+        Vector<Vector<String>> s = new Vector<Vector<String>>();
+        Vector<String> subVec = new Vector<>();
+
+        int openIndex = parsedChar.indexOf("(");
+        int closeIndex = parsedChar.indexOf(")");
+        int commaIndex = 0;
+        String methodName ="";
+        String parameters="";
+
+        while(openIndex != -1){
+            methodName = parsedChar.substring(0,openIndex-1);
+            subVec.add(methodName);
+            parameters = parsedChar.substring(openIndex,closeIndex);
+            commaIndex = parameters.indexOf(",");
+
+            while(commaIndex != -1){
+
+
+            }
+
+
+        }
+
+        s.addElement(subVec);
+
+        return s;
+    }*/
+
 
 
     public static void main(String[] args) throws ClassNotFoundException {
+        String methodLine="";
+       // Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
 
-        System.out.println(parser("DiscreteFourierTransform.java"));
+
+        methodLine = parser("calculator.java");
+        System.out.println(methodLine);
+       // listOfLists = lineParser(methodLine);
+
+    //    System.out.println(listOfLists.get(1).size());
 
     }
 }
