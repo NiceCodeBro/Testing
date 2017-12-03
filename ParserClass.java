@@ -124,6 +124,9 @@ public class ParserClass {
                             break;
                         }
                     }
+
+                    String returnType = allChar.substring(privateControlFirstIndex+1,privateControlLastIndex+1);
+
                     for(int i=privateControlFirstIndex-1; i>0; i--){
                         if(allChar.charAt(i) != ' ') {
                             privateControlLastIndex = i;
@@ -147,6 +150,7 @@ public class ParserClass {
 
                     if(keywordsList.indexOf(temp) == -1 && !(privateControlString.equals("private")) &&
                             pControl == -1) {
+                        parsedChar += returnType +" ";
                         parsedChar += allChar.substring(firstIndex+1,closingIndex+1);
                         parsedChar += "\n";
                     }
@@ -270,7 +274,7 @@ public class ParserClass {
 
     public static void main(String[] args) throws ClassNotFoundException {
         String methodLine="";
-       // Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
+        Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
 
 
         methodLine = parser("calculator.java");
