@@ -66,7 +66,12 @@ public class create_test_code {
 			"\r\n" + 
 			"		try {\r\n" + 
 			"			String content = \"\";\r\n" + 
-			"			if(result.equals("+ expected + "))\n"+"				content = \"The test is pass\\n\";\r\n" + 
+			"				if( params_return_types == "int" || params_return_types =="double"||
+					params_return_types == "Integer" || params_return_types =="Double") {
+				content2 +=expected ;
+		    	System.err.println("sadasdsa");
+
+			}			content = \"The test is pass\\n\";\r\n" + 
 					"			else\r\n" + 
 					"				content = \"The test is fail, expected:"+expected+" result:\"+result+\"\\n\";\r\n" + 
 					"			\r\n" + 
