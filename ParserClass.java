@@ -6,12 +6,70 @@ import java.util.Vector;
 
 public class ParserClass {
 
+
+    public static String deleteAfterCommaSpace(String parsedChar){
+
+        String temp1 = "";
+        String temp2 = "";
+        int commaIndex = parsedChar.indexOf(",");
+        int cIndex = parsedChar.indexOf(")");
+        while(commaIndex != -1){
+            for(int i=commaIndex+1; i<cIndex; i++){
+                if(parsedChar.charAt(i) != ' ' && parsedChar.charAt(i) != '\n'
+                        && parsedChar.charAt(i) != '\t'){
+                    temp1 = parsedChar.substring(0,commaIndex+1);
+                    temp2 = parsedChar.substring(i);
+                    parsedChar = temp1 + temp2;
+                    break;
+                }
+            }
+            commaIndex = parsedChar.indexOf(",",commaIndex+1);
+            cIndex = parsedChar.indexOf(")",commaIndex);
+
+        }
+
+
+        return parsedChar;
+    }
+
+
+    /**
+     *
+     * @param parsedChar parsedChar
+     * @return delete the after the "(" spaces
+     */
+    public static String deleteCSpace(String parsedChar){
+
+        String temp1 = "";
+        String temp2 = "";
+        int pIndex = parsedChar.indexOf("(");
+        int cIndex = parsedChar.indexOf(")");
+
+        while (pIndex != -1 ){
+            for(int i=pIndex+1; i<cIndex; i++){
+                if(parsedChar.charAt(i) != ' ' && parsedChar.charAt(i) != '\n'
+                        && parsedChar.charAt(i) != '\t'){
+                    temp1 = parsedChar.substring(0,pIndex+1);
+                    temp2 = parsedChar.substring(i);
+                    parsedChar = temp1 + temp2;
+                    break;
+                }
+            }
+            pIndex = parsedChar.indexOf("(",cIndex);
+            cIndex = parsedChar.indexOf(")",cIndex+1);
+        }
+
+        return parsedChar;
+    }
+
     /**
      *
      * @param allChar file to process in the string type
      * @return  the file in the string type without comment lines
      */
     public static String removeComment(String allChar){
+
+
 
         int commentIndex =0;
         int newLineIndex =0;
@@ -235,6 +293,8 @@ public class ParserClass {
             }
         }
 
+        parsedChar = deleteCSpace(parsedChar);
+        parsedChar = deleteAfterCommaSpace(parsedChar);
         return parsedChar;
     }
 
@@ -343,7 +403,7 @@ public class ParserClass {
         Vector<Vector<String>> listOfLists = new Vector<Vector<String>>();
 
         methodLine = parser("calculator.java");
-        //System.out.println(methodLine);
+       // System.out.println(methodLine);
         listOfLists = lineParser(methodLine);
 
         for(int i=0; i<listOfLists.size(); i++)
