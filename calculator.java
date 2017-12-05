@@ -39,5 +39,9 @@ public class calculator {
 		return a*b;
 		
 	}
+	public String stringAdder(String a,String b){
+		return a+b;
+	}
+	
 	
 }
