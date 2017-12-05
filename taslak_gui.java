@@ -112,6 +112,15 @@ public class taslak_gui extends JFrame
 		
 	}
 	
+	class add_param implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	    	
+	        String input = params.getText();   //receive input from text field
+	        System.out.println(input);
+
+	        
+	    }
+	}
 	 
 	public static void main(String[] args) 
 	{ 
